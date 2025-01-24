@@ -1,0 +1,28 @@
+<%= form_with(model: balance) do |form| %>
+  <% if balance.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(balance.errors.count, "error") %> prohibited this balance from being saved:</h2>
+
+      <ul>
+        <% balance.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :cuenta_id, style: "display: block" %>
+    <%= form.collection_select :cuenta_id, Cuenta.all.order(:nombre),:id,:name, include_blank: true %>
+  </div>
+
+  <div>
+    <%= form.label :saldo, style: "display: block" %>
+    <%= form.text_field :saldo %>
+  </div>
+
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
