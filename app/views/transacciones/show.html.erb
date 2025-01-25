@@ -6,23 +6,23 @@
 <hr>
 <div>
   <p>
-    <strong>Creditos:</strong>
+    <strong>Saldo Anterior:</strong>
+    <%= @transaccion.movimiento.saldo_anterior %>
+  </p>
+
+  <p>
+    <strong>Monto:</strong>
     <%= @transaccion.movimiento.monto %>
   </p>
 
   <p>
-    <strong>Creditos flotante:</strong>
+    <strong>Monto Flotante:</strong>
     <%= @transaccion.movimiento.monto_flotante %>
   </p>
 
   <p>
     <strong>Saldo Actual:</strong>
     <%= @transaccion.movimiento.saldo_actual %>
-  </p>
-
-  <p>
-    <strong>Saldo Anterior:</strong>
-    <%= @transaccion.movimiento.saldo_anterior %>
   </p>
 
 </div>

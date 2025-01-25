@@ -5,7 +5,7 @@ class TestMovimiento
 
     def tx_flotante
         hilos = []
-        10.times.each do |numero|
+        100.times.each do |numero|
             hilos << Thread.new do 
                 tx_monto  = 100
                 cuenta = Cuenta.find(1)
@@ -24,7 +24,7 @@ class TestMovimiento
 
     def tx_firmes
         hilos = []
-        10.times.each do |numero|
+        100.times.each do |numero|
             tx_monto  = 100
             cuenta = Cuenta.find(1)
             tx_tipo = "Credito" #["Credito", "Debito"].sample

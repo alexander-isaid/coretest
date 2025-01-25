@@ -64,3 +64,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem 'kaminari'
+gem 'bootstrap5-kaminari-views'

@@ -46,16 +46,16 @@ class Transaccion < ApplicationRecord
           movimiento.transaccion_type = self.class.to_s
           movimiento.transaccion_id = self.id
           movimiento.cuenta_id = self.cuenta_id
+          monto_flotante = self.cuenta.movimientos.sum(:monto_flotante)
+          monto = self.cuenta.movimientos.sum(:monto)
+          saldo = monto_flotante + monto
+          movimiento.saldo_anterior =  saldo
           if self.tipo == 'Credito'
             movimiento.monto = self.monto
           else
             movimiento.monto = (self.monto * -1)
           end
-          movimiento.save!
-          monto_flotante = self.cuenta.movimientos.sum(:monto_flotante)
-          monto = self.cuenta.movimientos.sum(:monto)
-          movimiento.saldo_anterior =   movimiento.saldo_actual
-          movimiento.saldo_actual   =   movimiento.saldo_anterior + monto_flotante + monto
+          movimiento.saldo_actual   =  movimiento.saldo_anterior + self.monto
           movimiento.save!
         end
       end

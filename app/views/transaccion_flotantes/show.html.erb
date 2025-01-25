@@ -1,28 +1,28 @@
 <p style="color: green"><%= notice %></p>
-
+<h2>Transaccion</h2>
 <%= render @transaccion_flotante %>
 
 <h3>Movimiento</h3>
 <hr>
 <div>
   <p>
-    <strong>Creditos:</strong>
+    <strong>Saldo Anterior:</strong>
+    <%= @transaccion_flotante.movimiento.saldo_anterior %>
+  </p>
+
+  <p>
+    <strong>Monto:</strong>
     <%= @transaccion_flotante.movimiento.monto %>
   </p>
 
   <p>
-    <strong>Creditos flotante:</strong>
+    <strong>Monto Flotante:</strong>
     <%= @transaccion_flotante.movimiento.monto_flotante %>
   </p>
 
   <p>
     <strong>Saldo Actual:</strong>
     <%= @transaccion_flotante.movimiento.saldo_actual %>
-  </p>
-
-  <p>
-    <strong>Saldo Anterior:</strong>
-    <%= @transaccion_flotante.movimiento.saldo_anterior %>
   </p>
 
 </div>

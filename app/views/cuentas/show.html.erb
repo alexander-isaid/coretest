@@ -2,80 +2,95 @@
 
 <%= render @cuenta %>
 
-<div id="transacciones">
 
-  <table class="table table-striped">
-    <thead>
-      <tr> 
-          <th>ID</th>
-          <th>Tipo</th>
-          <th>Descripcion</th>
-          <th>Saldo Anterior</th>
-          <th>Monto</th>
-          <th>Saldo Actual</th>
-          <th>Fecha</th>
-          <th>Error</th>
-          <th>Ver</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @cuenta.transacciones.order(:saldo_anterior).each do | transaccion| %>
-        <tr>
-          <td><%= transaccion.id %></td>
-          <td><%= transaccion.tipo %></td>
-          <td><%= transaccion.descripcion %></td>
-          <td><%= transaccion.saldo_anterior %></td>
-          <td><%= transaccion.monto %></td>
-          <td><%= transaccion.saldo_actual %></td>
-          <td><%= transaccion.fecha %></td>
-          <td><%= transaccion.estado %>
-          
-          </td>
-          <td><%= link_to "Show this transaccion", transaccion %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<ul class="nav nav-tabs" id="transacciones-tab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="transacciones-tab" data-bs-toggle="tab" data-bs-target="#transacciones-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Transaccion </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="transacciones-flotantes-tab" data-bs-toggle="tab" data-bs-target="#transacciones-flotantes-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Transaccion Flotante</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="transacciones-tab-pane" role="tabpanel" aria-labelledby="transacciones-tab" tabindex="0">
+    <div id="transacciones">
+
+      <table class="table table-striped">
+        <thead>
+          <tr> 
+              <th>ID</th>
+              <th>Tipo</th>
+              <th>Descripcion</th>
+              <th>Saldo Anterior</th>
+              <th>Monto</th>
+              <th>Saldo Actual</th>
+              <th>Fecha</th>
+              <th>Error</th>
+              <th>Ver</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @transacciones.each do | transaccion| %>
+            <tr>
+              <td><%= transaccion.id %></td>
+              <td><%= transaccion.tipo %></td>
+              <td><%= transaccion.descripcion %></td>
+              <td><%= transaccion.saldo_anterior %></td>
+              <td><%= transaccion.monto %></td>
+              <td><%= transaccion.saldo_actual %></td>
+              <td><%= transaccion.fecha %></td>
+              <td><%= transaccion.estado %>
+              </td>
+              <td> 
+                <%= link_to "<i class='bi bi-eye-fill'></i>".html_safe, transaccion, class: 'btn btn-primary rounded-circle btn-edits' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @transacciones, param_name: :pagina, pagination_class: "pagination-small pagination-centered" %>
+      
+    </div>
+  </div>
+  <div class="tab-pane fade" id="transacciones-flotantes-tab-pane" role="tabpanel" aria-labelledby="transacciones-flotantes-tab" tabindex="0">
+    <div id="transaccione-flotantes">
+
+      <table class="table table-striped">
+        <thead>
+          <tr> 
+              <th>ID</th>
+              <th>Tipo</th>
+              <th>Descripcion</th>
+              <th>Saldo Anterior</th>
+              <th>Monto</th>
+              <th>Saldo Actual</th>
+              <th>Fecha</th>
+              <th>Error</th>
+              <th>Ver</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @transaccion_flotantes.each do | transaccion| %>
+            <tr>
+              <td><%= transaccion.id %></td>
+              <td><%= transaccion.tipo %></td>
+              <td><%= transaccion.descripcion %></td>
+              <td><%= transaccion.saldo_anterior %></td>
+              <td><%= transaccion.monto %></td>
+              <td><%= transaccion.saldo_actual %></td>
+              <td><%= transaccion.fecha %></td>
+              <td><%= transaccion.estado %></td>
+              <td>
+                <%= link_to "<i class='bi bi-eye-fill'></i>".html_safe, transaccion, class: 'btn btn-primary rounded-circle btn-edits' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= paginate @transaccion_flotantes, param_name: :pagina, pagination_class: "pagination-small pagination-centered" %>
+    </div>
+  </div>
 </div>
-
-
-
-<div id="transacciones">
-
-  <table class="table table-striped">
-    <thead>
-      <tr> 
-          <th>ID</th>
-          <th>Tipo</th>
-          <th>Descripcion</th>
-          <th>Saldo Anterior</th>
-          <th>Monto</th>
-          <th>Saldo Actual</th>
-          <th>Fecha</th>
-          <th>Error</th>
-          <th>Ver</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @cuenta.transaccion_flotantes.order(:saldo_anterior).each do | transaccion| %>
-        <tr>
-          <td><%= transaccion.id %></td>
-          <td><%= transaccion.tipo %></td>
-          <td><%= transaccion.descripcion %></td>
-          <td><%= transaccion.saldo_anterior %></td>
-          <td><%= transaccion.monto %></td>
-          <td><%= transaccion.saldo_actual %></td>
-          <td><%= transaccion.fecha %></td>
-          <td><%= transaccion.estado %>
-          
-          </td>
-          <td><%= link_to "Show this transaccion", transaccion %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-
 
 <div>
   <%= link_to "Edit this cuenta", edit_cuenta_path(@cuenta) %> |
