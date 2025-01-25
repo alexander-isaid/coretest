@@ -24,7 +24,7 @@ class Test
                 puts "hilo #{numero} saldo balance #{cuenta.balance.saldo}"
             end
         end
-        hilos.each(&:join)
+       hilos.each(&:join)
     end
 
 
@@ -52,7 +52,7 @@ class Test
         end
         hilos.each(&:join)
 
-    end
+    end 
 
 
     def tx_credito_debito
