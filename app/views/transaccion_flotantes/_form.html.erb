@@ -1,0 +1,57 @@
+<%= form_with(model: transaccion_flotante) do |form| %>
+  <% if transaccion_flotante.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(transaccion_flotante.errors.count, "error") %> prohibited this transaccion_flotante from being saved:</h2>
+
+      <ul>
+        <% transaccion_flotante.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :cuenta_id, style: "display: block" %>
+    <%= form.text_field :cuenta_id %>
+  </div>
+
+  <div>
+    <%= form.label :descripcion, style: "display: block" %>
+    <%= form.text_field :descipcion %>
+  </div>
+
+  <div>
+    <%= form.label :estado, style: "display: block" %>
+    <%= form.text_field :estado %>
+  </div>
+
+  <div>
+    <%= form.label :fecha, style: "display: block" %>
+    <%= form.datetime_field :fecha %>
+  </div>
+
+  <div>
+    <%= form.label :saldo_anterior, style: "display: block" %>
+    <%= form.text_field :saldo_anterior %>
+  </div>
+
+  <div>
+    <%= form.label :monto, style: "display: block" %>
+    <%= form.text_field :monto %>
+  </div>
+
+  <div>
+    <%= form.label :saldo_actual, style: "display: block" %>
+    <%= form.text_field :saldo_actual %>
+  </div>
+
+  <div>
+    <%= form.label :tipo, style: "display: block" %>
+    <%= form.text_field :tipo %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

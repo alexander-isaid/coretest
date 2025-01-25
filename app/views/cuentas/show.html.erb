@@ -4,7 +4,7 @@
 
 <div id="transacciones">
 
-  <table id="tabla_paises" class="table table-striped">
+  <table class="table table-striped">
     <thead>
       <tr> 
           <th>ID</th>
@@ -20,6 +20,44 @@
     </thead>
     <tbody>
       <% @cuenta.transacciones.order(:saldo_anterior).each do | transaccion| %>
+        <tr>
+          <td><%= transaccion.id %></td>
+          <td><%= transaccion.tipo %></td>
+          <td><%= transaccion.descripcion %></td>
+          <td><%= transaccion.saldo_anterior %></td>
+          <td><%= transaccion.monto %></td>
+          <td><%= transaccion.saldo_actual %></td>
+          <td><%= transaccion.fecha %></td>
+          <td><%= transaccion.estado %>
+          
+          </td>
+          <td><%= link_to "Show this transaccion", transaccion %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+
+<div id="transacciones">
+
+  <table class="table table-striped">
+    <thead>
+      <tr> 
+          <th>ID</th>
+          <th>Tipo</th>
+          <th>Descripcion</th>
+          <th>Saldo Anterior</th>
+          <th>Monto</th>
+          <th>Saldo Actual</th>
+          <th>Fecha</th>
+          <th>Error</th>
+          <th>Ver</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cuenta.transaccion_flotantes.order(:saldo_anterior).each do | transaccion| %>
         <tr>
           <td><%= transaccion.id %></td>
           <td><%= transaccion.tipo %></td>

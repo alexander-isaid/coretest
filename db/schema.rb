@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_23_210853) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_24_224037) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,12 +31,40 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_23_210853) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "movimientos", force: :cascade do |t|
+    t.string "transaccion_type", null: false
+    t.bigint "transaccion_id", null: false
+    t.bigint "cuenta_id", null: false
+    t.decimal "monto_flotante", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "monto", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "saldo_anterior", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "saldo_actual", precision: 10, scale: 2, default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cuenta_id"], name: "index_movimientos_on_cuenta_id"
+    t.index ["transaccion_type", "transaccion_id"], name: "index_movimientos_on_transaccion"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "titulo"
     t.text "descripcion"
     t.boolean "activo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "transaccion_flotantes", force: :cascade do |t|
+    t.bigint "cuenta_id", null: false
+    t.string "descripcion"
+    t.string "estado"
+    t.datetime "fecha"
+    t.decimal "saldo_anterior", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "monto", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "saldo_actual", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "tipo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cuenta_id"], name: "index_transaccion_flotantes_on_cuenta_id"
   end
 
   create_table "transacciones", force: :cascade do |t|
@@ -54,5 +82,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_23_210853) do
   end
 
   add_foreign_key "balances", "cuentas"
+  add_foreign_key "movimientos", "cuentas"
+  add_foreign_key "transaccion_flotantes", "cuentas"
   add_foreign_key "transacciones", "cuentas"
 end

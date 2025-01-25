@@ -2,6 +2,33 @@
 
 <%= render @transaccion %>
 
+<h3>Movimiento</h3>
+<hr>
+<div>
+  <p>
+    <strong>Creditos:</strong>
+    <%= @transaccion.movimiento.monto %>
+  </p>
+
+  <p>
+    <strong>Creditos flotante:</strong>
+    <%= @transaccion.movimiento.monto_flotante %>
+  </p>
+
+  <p>
+    <strong>Saldo Actual:</strong>
+    <%= @transaccion.movimiento.saldo_actual %>
+  </p>
+
+  <p>
+    <strong>Saldo Anterior:</strong>
+    <%= @transaccion.movimiento.saldo_anterior %>
+  </p>
+
+</div>
+
+
+
 <div>
   <%= link_to "Edit this transaccion", edit_transaccion_path(@transaccion) %> |
   <%= link_to "Back to transacciones", transacciones_path %>

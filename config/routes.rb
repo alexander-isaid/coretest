@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :movimientos
+  resources :transaccion_flotantes
   resources :transacciones
   resources :balances
   resources :cuentas

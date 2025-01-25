@@ -12,6 +12,8 @@
 class Cuenta < ApplicationRecord
     has_one :balance
     has_many :transacciones
+    has_many :transaccion_flotantes
+    has_many :movimientos
     def name
         "#{nombre} - #{numero}"
     end

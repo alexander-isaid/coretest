@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: transacciones
+# Table name: transaccion_flotantes
 #
 #  id             :bigint           not null, primary key
 #  descripcion    :string
@@ -16,30 +16,25 @@
 #
 # Indexes
 #
-#  index_transacciones_on_cuenta_id  (cuenta_id)
+#  index_transaccion_flotantes_on_cuenta_id  (cuenta_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (cuenta_id => cuentas.id)
 #
-class Transaccion < ApplicationRecord
+class TransaccionFlotante < ApplicationRecord
   belongs_to :cuenta
   has_one :movimiento, as: :transaccion
 
-  validates_inclusion_of :tipo, in: %w(Credito Debito), on: :create, message: "extension %s is not included in the list"
-
-  #validate :calcular_balance, on: :create
-
-  #after_create :actualizar_balance
-
-
   after_create :create_movimiento
+  validates_inclusion_of :tipo, in: %w(Credito Debito), on: :create, message: "extension %s is not included in the list"
 
 
   def create_movimiento
+
     begin
       redis_lock ||= BloqueoRedis.new
-      key = "lock:cuenta:#{self.id}"
+      key = "lock:cuenta:#{self.cuenta_id}"
       redis_lock.lock_transction(key, ttl: 5, max_retries: 5, retry_delay: 1) do
         ActiveRecord::Base.transaction do
           movimiento = Movimiento.new
@@ -47,9 +42,9 @@ class Transaccion < ApplicationRecord
           movimiento.transaccion_id = self.id
           movimiento.cuenta_id = self.cuenta_id
           if self.tipo == 'Credito'
-            movimiento.monto = self.monto
+            movimiento.monto_flotante = self.monto
           else
-            movimiento.monto = (self.monto * -1)
+            movimiento.monto_flotante = (self.monto * -1)
           end
           movimiento.save!
           monto_flotante = self.cuenta.movimientos.sum(:monto_flotante)
@@ -63,32 +58,7 @@ class Transaccion < ApplicationRecord
       self.estado = "Error: #{e.message}"
       self.save!
     end
-
-
   end
 
-
-  def actualizar_balance
-    balance = Balance.find_by(cuenta_id: self.cuenta_id)
-    #self.saldo_anterior = balance.saldo
-
-    if tipo == "Credito"
-      balance.movimiento(self.monto, self.id)
-      #self.saldo_actual = BigDecimal(self.saldo_anterior.to_s) + BigDecimal(self.monto.to_s)
-    else
-      balance.movimiento(self.monto * -1, self.id)
-      #self.saldo_actual = BigDecimal(self.saldo_anterior.to_s) - BigDecimal(self.monto.to_s)
-    end
-
-  end
-
-  private
-    def calcular_balance
-      if tipo == "Debito"
-        if cuenta.balance.saldo < self.monto
-          errors.add(:monto, "Saldo insuficiente")
-        end
-      end
-    end
 
 end

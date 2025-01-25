@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Transaccion flotantes" %>
+
+<h1>Transaccion flotantes</h1>
+
+<div id="transaccion_flotantes">
+  <% @transaccion_flotantes.each do |transaccion_flotante| %>
+    <%= render transaccion_flotante %>
+    <p>
+      <%= link_to "Show this transaccion flotante", transaccion_flotante %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New transaccion flotante", new_transaccion_flotante_path %>

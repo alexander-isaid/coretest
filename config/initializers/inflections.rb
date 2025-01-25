@@ -7,8 +7,10 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.plural /^(ox)$/i, "\\1en"
 #   inflect.singular /^(ox)en/i, "\\1"
    inflect.irregular "transaccion", "transacciones"
+   inflect.irregular "transaccion_flotante", "transaccion_flotantes"
    inflect.irregular "balance", "balances"
    inflect.irregular "cuenta", "cuentas"
+   inflect.irregular "movimiento", "movimientos"
 #   inflect.uncountable %w( fish sheep )
 end
 

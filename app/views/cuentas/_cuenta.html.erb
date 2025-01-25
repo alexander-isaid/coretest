@@ -9,11 +9,17 @@
     <%= cuenta.nombre %>
   </p>
 
-  <!-- <p>
-    <strong>Disponible:</strong>
-    <%= cuenta.disponible %>
-  </p> -->
+  <p>
+    <strong>Saldo Flotante:</strong>
+    <%= cuenta.movimientos.sum(:monto_flotante) %>
+  </p>
 
+
+  <p>
+    <strong>Saldo:</strong>
+    <%= cuenta.movimientos.sum(:monto) %>
+  </p>
+<!-- 
   <div>
 
     <p>
@@ -22,6 +28,6 @@
     </p>
   
   </div>
-  
+   -->
 
 </div>
