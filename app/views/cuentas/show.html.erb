@@ -24,7 +24,8 @@
               <th>Saldo Anterior</th>
               <th>Monto</th>
               <th>Saldo Actual</th>
-              <th>Fecha</th>
+              <th>Fecha Operación</th>
+              <th>Fecha Creación</th>
               <th>Error</th>
               <th>Ver</th>
           </tr>
@@ -39,6 +40,7 @@
               <td><%= transaccion.monto %></td>
               <td><%= transaccion.saldo_actual %></td>
               <td><%= transaccion.fecha %></td>
+              <td><%= transaccion.created_at %></td>
               <td><%= transaccion.estado %>
               </td>
               <td> 
@@ -64,7 +66,8 @@
               <th>Saldo Anterior</th>
               <th>Monto</th>
               <th>Saldo Actual</th>
-              <th>Fecha</th>
+              <th>Fecha Operación</th>
+              <th>Fecha Creación</th>
               <th>Error</th>
               <th>Ver</th>
           </tr>
@@ -79,6 +82,7 @@
               <td><%= transaccion.monto %></td>
               <td><%= transaccion.saldo_actual %></td>
               <td><%= transaccion.fecha %></td>
+              <td><%= transaccion.created_at %></td>
               <td><%= transaccion.estado %></td>
               <td>
                 <%= link_to "<i class='bi bi-eye-fill'></i>".html_safe, transaccion, class: 'btn btn-primary rounded-circle btn-edits' %>

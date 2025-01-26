@@ -8,8 +8,8 @@ class CuentasController < ApplicationController
 
   # GET /cuentas/1 or /cuentas/1.json
   def show
-    @transacciones         = @cuenta.transacciones.order(fecha: :asc).page(params[:pagina])
-    @transaccion_flotantes = @cuenta.transaccion_flotantes.order(fecha: :asc).page(params[:pagina])
+    @transacciones         = @cuenta.transacciones.order(created_at: :desc).page(params[:pagina])
+    @transaccion_flotantes = @cuenta.transaccion_flotantes.order(created_at: :desc).page(params[:pagina])
   end
 
   # GET /cuentas/new

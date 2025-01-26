@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  resources :movimientos
+
+  mount Sidekiq::Web => '/sidekiq'
   resources :transaccion_flotantes
   resources :transacciones
   resources :balances

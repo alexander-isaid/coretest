@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_24_224037) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_26_023819) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,17 +32,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_24_224037) do
   end
 
   create_table "movimientos", force: :cascade do |t|
-    t.string "transaccion_type", null: false
-    t.bigint "transaccion_id", null: false
     t.bigint "cuenta_id", null: false
-    t.decimal "monto_flotante", precision: 10, scale: 2, default: "0.0", null: false
+    t.bigint "transaccion_id"
+    t.bigint "transaccion_flotante_id"
     t.decimal "monto", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "monto_flotante", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "saldo_anterior", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "saldo_actual", precision: 10, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cuenta_id"], name: "index_movimientos_on_cuenta_id"
-    t.index ["transaccion_type", "transaccion_id"], name: "index_movimientos_on_transaccion"
+    t.index ["transaccion_flotante_id"], name: "index_movimientos_on_transaccion_flotante_id"
+    t.index ["transaccion_id"], name: "index_movimientos_on_transaccion_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -83,6 +84,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_24_224037) do
 
   add_foreign_key "balances", "cuentas"
   add_foreign_key "movimientos", "cuentas"
+  add_foreign_key "movimientos", "transaccion_flotantes"
+  add_foreign_key "movimientos", "transacciones"
   add_foreign_key "transaccion_flotantes", "cuentas"
   add_foreign_key "transacciones", "cuentas"
 end

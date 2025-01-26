@@ -1,31 +1,34 @@
 <p style="color: green"><%= notice %></p>
-<h2>Transaccion</h2>
+<h2>Transaccion #<%= @transaccion_flotante.id %></h2>
 <%= render @transaccion_flotante %>
 
 <h3>Movimiento</h3>
 <hr>
-<div>
-  <p>
-    <strong>Saldo Anterior:</strong>
-    <%= @transaccion_flotante.movimiento.saldo_anterior %>
-  </p>
+<% if @transaccion_flotante.movimiento.present? %>
+  <div>
+    <p>
+      <strong>Saldo Anterior:</strong>
+      <%= @transaccion_flotante.movimiento.saldo_anterior %>
+    </p>
 
-  <p>
-    <strong>Monto:</strong>
-    <%= @transaccion_flotante.movimiento.monto %>
-  </p>
+    <p>
+      <strong>Monto:</strong>
+      <%= @transaccion_flotante.movimiento.monto %>
+    </p>
 
-  <p>
-    <strong>Monto Flotante:</strong>
-    <%= @transaccion_flotante.movimiento.monto_flotante %>
-  </p>
+    <p>
+      <strong>Monto Flotante:</strong>
+      <%= @transaccion_flotante.movimiento.monto_flotante %>
+    </p>
 
-  <p>
-    <strong>Saldo Actual:</strong>
-    <%= @transaccion_flotante.movimiento.saldo_actual %>
-  </p>
+    <p>
+      <strong>Saldo Actual:</strong>
+      <%= @transaccion_flotante.movimiento.saldo_actual %>
+    </p>
 
-</div>
+  </div>
+<%  end %>
+
 <div>
   <%= link_to "Edit this transaccion flotante", edit_transaccion_flotante_path(@transaccion_flotante) %> |
   <%= link_to "Back to transaccion flotantes", transaccion_flotantes_path %>

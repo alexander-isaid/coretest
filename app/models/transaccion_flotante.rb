@@ -24,7 +24,7 @@
 #
 class TransaccionFlotante < ApplicationRecord
   belongs_to :cuenta
-  has_one :movimiento, as: :transaccion
+  has_one :movimiento, dependent: :destroy
 
   after_create :create_movimiento
   validates_inclusion_of :tipo, in: %w(Credito Debito), on: :create, message: "extension %s is not included in the list"
@@ -35,11 +35,10 @@ class TransaccionFlotante < ApplicationRecord
     begin
       redis_lock ||= BloqueoRedis.new
       key = "lock:cuenta:#{self.cuenta_id}"
-      redis_lock.lock_transction(key, ttl: 5, max_retries: 5, retry_delay: 1) do
+      redis_lock.lock_transction(key, ttl: 6, max_retries: 5, retry_delay: 1) do
         ActiveRecord::Base.transaction do
           movimiento = Movimiento.new
-          movimiento.transaccion_type = self.class.to_s
-          movimiento.transaccion_id = self.id
+          movimiento.transaccion_flotante_id = self.id
           movimiento.cuenta_id = self.cuenta_id
           monto_flotante = self.cuenta.movimientos.sum(:monto_flotante)
           monto = self.cuenta.movimientos.sum(:monto)
@@ -50,12 +49,12 @@ class TransaccionFlotante < ApplicationRecord
           else
             movimiento.monto_flotante = (self.monto * -1)
           end
-          movimiento.saldo_actual   =  movimiento.saldo_anterior + self.monto
+          movimiento.saldo_actual   =  movimiento.saldo_anterior + movimiento.monto
           movimiento.save!
         end
       end
     rescue => e
-      self.estado = "Error: #{e.message}"
+      self.estado = "#{e.message}"
       self.save!
     end
   end
