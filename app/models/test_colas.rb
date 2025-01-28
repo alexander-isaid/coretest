@@ -3,34 +3,44 @@ class TestColas
 
     def self.encolar
 
-        3000.times.each do |numero|
-            puts "Encolando transaccion numero: #{numero}"
+        50000.times.each do |numero|
+            #cuenta = Cuenta.all.sample.id
+            cuenta = Cuenta.all.sample.id
             test = TestColas.new
-            cuenta = 1
-            if numero <= 1000
-                puts "Enviando a la cuenta: #{cuenta}"
-                test.credito(cuenta)
-                test.debitos(cuenta)
-                test.credito_flotante(cuenta)
-                test.debitos_flotante(cuenta)    
-            end
-            if numero > 1000 && numero <= 2000
-                cuenta = 2
-                puts "Enviando a la cuenta: #{cuenta}"
-                test.credito(cuenta)
-                test.debitos(cuenta)
-                test.credito_flotante(cuenta)
-                test.debitos_flotante(cuenta)
-            end
+            test.credito(cuenta)
+            #test.debitos(cuenta)
 
-            if numero > 2000 && numero <= 3000
-                cuenta = 3
-                puts "Enviando a la cuenta: #{cuenta}"
-                test.credito(cuenta)
-                test.debitos(cuenta)
-                test.credito_flotante(cuenta)
-                test.debitos_flotante(cuenta)
-            end
+            # test.debitos(cuenta)
+            # test.credito_flotante(cuenta)
+            # test.debitos_flotante(cuenta)   
+
+            # puts "Encolando transaccion numero: #{numero}"
+            # test = TestColas.new
+            # cuenta = 1
+            # if numero <= 1000
+            #     puts "Enviando a la cuenta: #{cuenta}"
+            #     test.credito(cuenta)
+            #     test.debitos(cuenta)
+            #     test.credito_flotante(cuenta)
+            #     test.debitos_flotante(cuenta)    
+            # end
+            # if numero > 1000 && numero <= 2000
+            #     cuenta = 2
+            #     puts "Enviando a la cuenta: #{cuenta}"
+            #     test.credito(cuenta)
+            #     test.debitos(cuenta)
+            #     test.credito_flotante(cuenta)
+            #     test.debitos_flotante(cuenta)
+            # end
+
+            # if numero > 2000 && numero <= 3000
+            #     cuenta = 3
+            #     puts "Enviando a la cuenta: #{cuenta}"
+            #     test.credito(cuenta)
+            #     test.debitos(cuenta)
+            #     test.credito_flotante(cuenta)
+            #     test.debitos_flotante(cuenta)
+            # end
         end
     end
 

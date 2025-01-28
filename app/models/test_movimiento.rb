@@ -10,6 +10,7 @@ class TestMovimiento
             cuenta_id: cuenta.id,
             monto: tx_monto,
             tipo: tx_tipo,
+            estado: 'Recibida',
             descripcion: Faker::Commerce.product_name,
             fecha: Faker::Time.between(from: 1.year.ago, to: Time.now)
         )
@@ -23,6 +24,7 @@ class TestMovimiento
             cuenta_id: cuenta.id,
             monto: tx_monto,
             tipo: tx_tipo,
+            estado: 'Recibida',
             descripcion: Faker::Commerce.product_name,
             fecha: Faker::Time.between(from: 1.year.ago, to: Time.now)
         )
@@ -35,6 +37,7 @@ class TestMovimiento
         Transaccion.create!(
             cuenta_id: cuenta.id,
             monto: tx_monto,
+            estado: 'Recibida',
             tipo: tx_tipo,
             descripcion: Faker::Commerce.product_name,
             fecha: Faker::Time.between(from: 1.year.ago, to: Time.now)
@@ -49,6 +52,7 @@ class TestMovimiento
             cuenta_id: cuenta.id,
             monto: tx_monto,
             tipo: tx_tipo,
+            estado: 'Recibida',
             descripcion: Faker::Commerce.product_name,
             fecha: Faker::Time.between(from: 1.year.ago, to: Time.now)
         )
@@ -85,6 +89,7 @@ class TestMovimiento
                 cuenta_id: cuenta.id,
                 monto: tx_monto,
                 tipo: tx_tipo,
+                estado: 'Recibida',
                 descripcion: Faker::Commerce.product_name,
                 fecha: Faker::Time.between(from: 1.year.ago, to: Time.now)
             )

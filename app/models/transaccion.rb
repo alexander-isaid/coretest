@@ -24,42 +24,57 @@
 #
 class Transaccion < ApplicationRecord
   belongs_to :cuenta
-  has_one :movimiento
+  has_one :movimiento, dependent: :destroy
 
   validates_inclusion_of :tipo, in: %w(Credito Debito), on: :create, message: "extension %s is not included in the list"
 
   #validate :calcular_balance, on: :create
 
-  #after_create :actualizar_balance
-
-
   after_create :create_movimiento
-
+   
 
   def create_movimiento
     begin
-      redis_lock ||= BloqueoRedis.new
-      key = "lock:cuenta:#{self.cuenta_id}"
-      redis_lock.lock_transction(key, ttl: 6, max_retries: 5, retry_delay: 1) do
+      if self.estado == 'Recibida'
         ActiveRecord::Base.transaction do
           movimiento = Movimiento.new
           movimiento.transaccion_id = self.id
           movimiento.cuenta_id = self.cuenta_id
-          monto_flotante = self.cuenta.movimientos.sum(:monto_flotante)
-          monto = self.cuenta.movimientos.sum(:monto)
-          saldo = monto_flotante + monto
-          movimiento.saldo_anterior =  saldo
+          movimiento.tipo_operacion = self.tipo
           if self.tipo == 'Credito'
             movimiento.monto = self.monto
           else
             movimiento.monto = (self.monto * -1)
           end
-          movimiento.saldo_actual   =  movimiento.saldo_anterior + movimiento.monto
           movimiento.save!
+          movimiento.procesar_movimientos
+          self.estado = 'Finalizada'
+          self.save!
         end
       end
+      # redis_lock ||= BloqueoRedis.new
+      # key = "lock:cuenta:#{self.cuenta_id}"
+      # redis_lock.lock_transction(key, ttl: 5, max_retries:5, retry_delay: 1) do
+      #   ActiveRecord::Base.transaction do
+      #     movimiento = Movimiento.new
+      #     movimiento.transaccion_id = self.id
+      #     movimiento.cuenta_id = self.cuenta_id
+      #     monto_flotante = self.cuenta.movimientos.sum(:monto_flotante)
+      #     monto = self.cuenta.movimientos.sum(:monto)
+      #     saldo = monto_flotante + monto
+      #     movimiento.saldo_anterior =  saldo
+      #     if self.tipo == 'Credito'
+      #       movimiento.monto = self.monto
+      #     else
+      #       movimiento.monto = (self.monto * -1)
+      #     end
+      #     movimiento.saldo_actual   =  movimiento.saldo_anterior + movimiento.monto
+      #     movimiento.save!
+      #   end
+      # end
     rescue => e
-      self.estado = "Error: #{e.message}"
+      puts "#{e.message}".red
+      self.estado = "Error"
       self.save!
     end
 
@@ -68,16 +83,16 @@ class Transaccion < ApplicationRecord
 
 
   def actualizar_balance
-    balance = Balance.find_by(cuenta_id: self.cuenta_id)
-    #self.saldo_anterior = balance.saldo
-
+    balance = self.cuenta.balance
+    # self.saldo_anterior = balance.saldo
     if tipo == "Credito"
-      balance.movimiento(self.monto, self.id)
+      balance.movimiento(self.monto, self.movimiento.id)
       #self.saldo_actual = BigDecimal(self.saldo_anterior.to_s) + BigDecimal(self.monto.to_s)
     else
-      balance.movimiento(self.monto * -1, self.id)
+      balance.movimiento(self.monto * -1, self.movimiento.id)
       #self.saldo_actual = BigDecimal(self.saldo_anterior.to_s) - BigDecimal(self.monto.to_s)
     end
+    #self.save!
 
   end
 

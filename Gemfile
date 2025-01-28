@@ -68,3 +68,4 @@ end
 gem 'kaminari'
 gem 'bootstrap5-kaminari-views'
 gem "sidekiq", "~> 7.3"
+gem 'colorize'

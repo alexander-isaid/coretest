@@ -19,51 +19,36 @@
 #
 class Balance < ApplicationRecord
   belongs_to :cuenta
+  
 
-
-  def self.limpiar(cuenta)
-
-    cuenta = Cuenta.find(cuenta)
-    cuenta.balance.update(saldo: 0)
-    Transaccion.delete_all
-
-  end
-
-
-
-  def movimiento(amount, transaccion_id)
-    redis_lock ||= BloqueoRedis.new
-    transaccion = Transaccion.find(transaccion_id)
+  def movimiento(amount, movimiento_id)
     begin
+
+      redis_lock ||= BloqueoRedis.new
       if redis_lock.present?
-        key = "lock:cuenta:#{self.cuenta.id}"
-        redis_lock.lock_transction(key, ttl: 5, max_retries: 5, retry_delay: 1) do
+        key = "lock:cuenta:#{self.cuenta_id}"
+        redis_lock.lock_transction(key, ttl: 5, max_retries: 6, retry_delay: 2) do
           ActiveRecord::Base.transaction do
             self.lock!
-
-            #raise "Error de conexion +++++++" if (rand 5000%327) == 12
-
-            sleep(4) if (rand 5000%327) == 48
-
-            transaccion.saldo_anterior = self.saldo
-            transaccion.save! 
-
-            new_saldo = BigDecimal(self.saldo.to_s) + BigDecimal(amount.to_s)
-            raise "Saldo insuficiente" if new_saldo < 0
-
-            transaccion.saldo_actual = new_saldo
-            transaccion.save! 
-
-            self.saldo = new_saldo
+            # #raise "Error de conexion +++++++" if (rand 5000%327) == 12
+            # sleep(4) if (rand 5000%327) == 48
+            movimiento = Movimiento.find(movimiento_id)
+            movimiento.saldo_anterior = self.saldo
+            nuevo_saldo = BigDecimal(self.saldo.to_s) + BigDecimal(amount.to_s)
+            movimiento.saldo_actual = nuevo_saldo
+            movimiento.estado = 'Finalizado'
+            movimiento.save! 
+            self.saldo = nuevo_saldo
             self.save!
             
           end
         end
       end
     rescue => e
-      transaccion.estado= "Error #{e.message}"
-      transaccion.save!
-      puts "Error: #{e.message}"
+      puts "#{e.message}".red
+      movimiento.estado= "Error"
+      movimiento.save!
+
     end  
 
   end

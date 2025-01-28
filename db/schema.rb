@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_26_023819) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_27_214949) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,6 +41,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_26_023819) do
     t.decimal "saldo_actual", precision: 10, scale: 2, default: "0.0", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "estado"
+    t.string "tipo_operacion"
+    t.index ["cuenta_id", "monto"], name: "index_movimientos_on_cuenta_and_monto"
+    t.index ["cuenta_id", "monto_flotante"], name: "index_movimientos_on_cuenta_and_monto_flotante"
     t.index ["cuenta_id"], name: "index_movimientos_on_cuenta_id"
     t.index ["transaccion_flotante_id"], name: "index_movimientos_on_transaccion_flotante_id"
     t.index ["transaccion_id"], name: "index_movimientos_on_transaccion_id"

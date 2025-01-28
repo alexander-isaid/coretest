@@ -33,31 +33,58 @@ class TransaccionFlotante < ApplicationRecord
   def create_movimiento
 
     begin
-      redis_lock ||= BloqueoRedis.new
-      key = "lock:cuenta:#{self.cuenta_id}"
-      redis_lock.lock_transction(key, ttl: 6, max_retries: 5, retry_delay: 1) do
-        ActiveRecord::Base.transaction do
-          movimiento = Movimiento.new
-          movimiento.transaccion_flotante_id = self.id
-          movimiento.cuenta_id = self.cuenta_id
-          monto_flotante = self.cuenta.movimientos.sum(:monto_flotante)
-          monto = self.cuenta.movimientos.sum(:monto)
-          saldo = monto_flotante + monto
-          movimiento.saldo_anterior =  saldo
-          if self.tipo == 'Credito'
-            movimiento.monto_flotante = self.monto
-          else
-            movimiento.monto_flotante = (self.monto * -1)
-          end
-          movimiento.saldo_actual   =  movimiento.saldo_anterior + movimiento.monto
-          movimiento.save!
+      if self.estado == 'Recibido'
+        movimiento = Movimiento.new
+        movimiento.transaccion_flotante_id = self.id
+        movimiento.cuenta_id = self.cuenta_id
+        if self.tipo == 'Credito'
+          movimiento.monto_flotante = self.monto
+        else
+          movimiento.monto_flotante = (self.monto * -1)
         end
+        movimiento.save!
       end
+  
+      # redis_lock ||= BloqueoRedis.new
+      # key = "lock:cuenta:#{self.cuenta_id}"
+      # redis_lock.lock_transction(key, ttl: 15, max_retries: 5, retry_delay: 1) do
+      #   ActiveRecord::Base.transaction do
+      #     movimiento = Movimiento.new
+      #     movimiento.transaccion_flotante_id = self.id
+      #     movimiento.cuenta_id = self.cuenta_id
+      #     monto_flotante = self.cuenta.movimientos.sum(:monto_flotante)
+      #     monto = self.cuenta.movimientos.sum(:monto)
+      #     saldo = monto_flotante + monto
+      #     movimiento.saldo_anterior =  saldo
+      #     if self.tipo == 'Credito'
+      #       movimiento.monto_flotante = self.monto
+      #     else
+      #       movimiento.monto_flotante = (self.monto * -1)
+      #     end
+      #     movimiento.saldo_actual   =  movimiento.saldo_anterior + movimiento.monto
+      #     movimiento.save!
+      #   end
+      # end
     rescue => e
-      self.estado = "#{e.message}"
+      puts "#{e.message}"
+      self.estado = "Error"
       self.save!
     end
   end
+
+
+  # def actualizar_balance
+  #   # balance = self.cuenta.balance
+  #   # self.saldo_anterior = balance.saldo
+  #   if tipo == "Credito"
+  #     balance.movimiento(self.monto, self.movimiento_id)
+  #     #self.saldo_actual = BigDecimal(self.saldo_anterior.to_s) + BigDecimal(self.monto.to_s)
+  #   else
+  #     balance.movimiento(self.monto * -1, self.movimiento_id)
+  #     #self.saldo_actual = BigDecimal(self.saldo_anterior.to_s) - BigDecimal(self.monto.to_s)
+  #   end
+  #   #self.save!
+  # end
 
 
 end

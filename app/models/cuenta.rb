@@ -17,4 +17,6 @@ class Cuenta < ApplicationRecord
     def name
         "#{nombre} - #{numero}"
     end
+
+
 end

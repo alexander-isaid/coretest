@@ -3,10 +3,12 @@
 # Table name: movimientos
 #
 #  id                      :bigint           not null, primary key
+#  estado                  :string
 #  monto                   :decimal(10, 2)   default(0.0), not null
 #  monto_flotante          :decimal(10, 2)   default(0.0), not null
 #  saldo_actual            :decimal(10, 2)   default(0.0), not null
 #  saldo_anterior          :decimal(10, 2)   default(0.0), not null
+#  tipo_operacion          :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  cuenta_id               :bigint           not null
@@ -15,9 +17,11 @@
 #
 # Indexes
 #
-#  index_movimientos_on_cuenta_id                (cuenta_id)
-#  index_movimientos_on_transaccion_flotante_id  (transaccion_flotante_id)
-#  index_movimientos_on_transaccion_id           (transaccion_id)
+#  index_movimientos_on_cuenta_and_monto           (cuenta_id,monto)
+#  index_movimientos_on_cuenta_and_monto_flotante  (cuenta_id,monto_flotante)
+#  index_movimientos_on_cuenta_id                  (cuenta_id)
+#  index_movimientos_on_transaccion_flotante_id    (transaccion_flotante_id)
+#  index_movimientos_on_transaccion_id             (transaccion_id)
 #
 # Foreign Keys
 #
